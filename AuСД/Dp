@@ -1,1 +1,52 @@
+import java.util.Scanner;
 
+public class Main {
+    private static final long MOD = 1000000007;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+        int a = n - k;
+
+        
+        long fact1 = factorialMod(n); 
+        long fact2 = factorialMod(k); 
+        long fact3 = factorialMod(a); 
+
+        
+        
+        long result = fact1 * modInverse(fact2, MOD) % MOD;
+        result = result * modInverse(fact3, MOD) % MOD;
+
+        System.out.println(result);
+    }
+
+    
+    public static long factorialMod(int n) {
+        long result = 1;
+        for (int i = 2; i <= n; i++) {
+            result = result * i % MOD;
+        }
+        return result;
+    }
+
+    
+    public static long modInverse(long a, long mod) {
+        return powerMod(a, mod - 2, mod);
+    }
+
+    
+    public static long powerMod(long base, long exp, long mod) {
+        long result = 1;
+        while (exp > 0) {
+            if (exp % 2 == 1) {
+                result = result * base % mod;
+            }
+            base = base * base % mod;
+            exp /= 2;
+        }
+        return result;
+    }
+}
