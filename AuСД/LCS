@@ -1,0 +1,77 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main{
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+
+        int length = input.nextInt();
+        int[] a = new int[length];
+        int[] b = new int[length];
+
+
+        for (int index = 0; index < length; index++) {
+            a[index] = input.nextInt();
+        }
+
+
+        for (int index = 0; index < length; index++) {
+            b[index] = input.nextInt();
+        }
+
+
+        int[][] lcs = new int[length + 1][length + 1];
+
+
+        for (int i = 1; i <= length; i++) {
+            for (int j = 1; j <= length; j++) {
+                if (a[i - 1] == b[j - 1]) {
+                    lcs[i][j] = lcs[i - 1][j - 1] + 1;
+                } else {
+                    lcs[i][j] = Math.max(lcs[i - 1][j], lcs[i][j - 1]);
+                }
+            }
+        }
+
+
+        List<Integer> indexesA = new ArrayList<>();
+        List<Integer> indexesB = new ArrayList<>();
+
+
+        int m = length, n = length;
+        while (m > 0 && n > 0) {
+            if (a[m - 1] == b[n - 1]) {
+                indexesA.add(m - 1);
+                indexesB.add(n - 1);
+                m--;
+                n--;
+            } else if (lcs[m - 1][n] >= lcs[m][n - 1]) {
+                m--;
+            } else {
+                n--;
+            }
+        }
+
+
+        List<Integer> IndexA = new ArrayList<>();
+        List<Integer> IndexB = new ArrayList<>();
+        for (int k = indexesA.size() - 1; k >= 0; k--) {
+            IndexA.add(indexesA.get(k));
+            IndexB.add(indexesB.get(k));
+        }
+
+
+        System.out.println(IndexA.size());
+        for (int idx : IndexA) {
+            System.out.print(idx + " ");
+        }
+        System.out.println();
+        for (int idx : IndexB) {
+            System.out.print(idx + " ");
+        }
+
+        input.close();
+    }
+}
