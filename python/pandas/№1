@@ -1,0 +1,23 @@
+import pandas as pd
+df=pd.read_csv('wage.csv')
+print(df.head())
+df['gender'] = df['gender'].replace({1: M})
+df['gender'] = df['gender'].replace({0: 'F'})
+average_salary = df.groupby('gender')['wage'].mean()
+duplicates = df['person_id'].value_counts()
+duplicates = duplicates[duplicates > 1]
+wage_check = df.groupby('person_id')['wage'].nunique()
+wage_issues = wage_check[wage_check > 1]
+print(wage_issues)
+df = df.drop_duplicates(subset=['person_id'])
+print(df['wage'].describe())
+df = df[(df['wage'] > 0) & (df['wage'] < 1_000_000)]
+bonus = pd.read_csv('bonus.csv', sep=';')
+print(bonus.head())
+df = pd.merge(df, bonus, on='person_id', how='outer')
+df['bonus'] = df['bonus'].fillna(0)
+df = df.dropna(subset=['wage'])
+df['total'] = df['wage'] * 12 + df['bonus']
+salary_stats = df.groupby('gender')['total'].agg(['mean', 'median'])
+print(salary_stats)
+df.to_csv('final_salary_data.csv', index=False)
