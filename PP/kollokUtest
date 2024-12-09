@@ -1,0 +1,43 @@
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class FactorialCalculatorTest {
+
+    private final FactorialCalculator calculator = new FactorialCalculator();
+
+    @Test
+    public void testCalculateFactorial() {
+        assertEquals(1, calculator.calculateFactorial(0));
+        assertEquals(1, calculator.calculateFactorial(1));
+        assertEquals(2, calculator.calculateFactorial(2));
+        assertEquals(6, calculator.calculateFactorial(3));
+        assertEquals(24, calculator.calculateFactorial(4));
+        assertEquals(120, calculator.calculateFactorial(5));
+    }
+
+    @Test
+    public void testCalculateFactorialNegativeInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.calculateFactorial(-1);
+        });
+        assertEquals("Number must be non-negative.", exception.getMessage());
+    }
+
+    @Test
+    public void testGetFirstNFactorials() {
+        List<Long> expected = List.of(1L, 1L, 2L, 6L, 24L);
+        assertEquals(expected, calculator.getFirstNFactorials(5));
+    }
+
+    @Test
+    public void testGetFirstNFactorialsInvalidInput() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.getFirstNFactorials(0);
+        });
+        assertEquals("n must be a natural number (greater than 0).", exception.getMessage());
+    }
+}
+
