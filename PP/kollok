@@ -1,0 +1,29 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+    
+    public long Factorial(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("Enter other number");
+        }
+        long factorial = 1;
+        for (int i = 1; i <= number; i++) {
+            factorial *= i;
+        }
+        return factorial;
+    }
+
+    
+    public List<Long> getFirst(int n) {
+        if (n < 1) {
+            throw new IllegalArgumentException(" enter greater than 0");
+        }
+        List<Long> factorials = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            factorials.add(Factorial(i));
+        }
+        return factorials;
+    }
+}
