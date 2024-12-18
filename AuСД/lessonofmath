@@ -1,0 +1,74 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <set>
+
+using namespace std;
+
+void remove(unordered_map<int, int>& m, set<int>& keys, int x, int y) {
+    int sum = x + y;
+    if (m.count(sum)) {
+        if (m[sum] == 1) {
+            m.erase(sum);
+            keys.erase(sum);
+        } else {
+            m[sum]--;
+        }
+    }
+}
+
+int main() {
+    ifstream rd("input.txt");
+    ofstream wr("output.txt");
+
+    int n;
+    rd >> n;
+    int size = n * n;
+    vector<int> arrA(size);
+    for (int i = 0; i < size; i++) {
+        rd >> arrA[i];
+    }
+    sort(arrA.begin(), arrA.end());
+    
+    unordered_map<int, int> sum;
+    set<int> keys; 
+    for (int num : arrA) {
+        sum[num]++;
+        keys.insert(num);
+    }
+    if (n == 1) {
+        int A1 = *keys.begin() / 2; 
+        wr << A1 << "\n";
+        return 0;
+    }
+
+    vector<int> A(n);
+    int A1 = *keys.begin() / 2; 
+    A[0] = A1;
+    remove(sum, keys, A1, A1);
+    wr << A1 << "\n";
+
+    int A2 = *keys.begin() - A1;
+    A[1] = A2;
+    remove(sum, keys, A2, A2);
+    remove(sum, keys, A1, A2);
+    remove(sum, keys, A2, A1);
+    wr << A2 << "\n";
+
+    for (int i = 2; i < n; i++) {
+        int A3 = *keys.begin() - A[0];
+        A[i] = A3;
+        remove(sum, keys, A3, A3);
+        for (int j = 0; j < i; j++) {
+            remove(sum, keys, A[j], A3);
+            remove(sum, keys, A3, A[j]);
+        }
+        wr << A3 << "\n";
+    }
+
+    rd.close();
+    wr.close();
+    return 0;
+}
